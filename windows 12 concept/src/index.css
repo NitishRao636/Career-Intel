@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Segoe UI Variable";
+  src: local("Segoe UI"), local("SegoeUI");
+}
+
+:root {
+  --accent: #60a5fa;
+  --accent-2: #a78bfa;
+  --glass: rgba(20, 22, 30, 0.55);
+  --glass-light: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.12);
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: "Segoe UI Variable", "Segoe UI", -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+  color: #fff;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(20, 22, 30, 0.55);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.glass-darker {
+  background: rgba(10, 12, 18, 0.75);
+  backdrop-filter: blur(50px) saturate(180%);
+  -webkit-backdrop-filter: blur(50px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(96, 165, 250, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(96, 165, 250, 0.6); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes boot-fade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes aurora {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(30px, -50px) rotate(120deg); }
+  66% { transform: translate(-20px, 20px) rotate(240deg); }
+}
+
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.6;
+  animation: aurora 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+.animate-slide-up { animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-scale-in { animation: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-boot { animation: boot-fade 0.8s ease-out forwards; }
+
+/* Taskbar hover */
+.taskbar-icon {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.taskbar-icon:hover {
+  transform: translateY(-4px) scale(1.1);
+}
+.taskbar-icon:hover .icon-bg {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.taskbar-icon.active .icon-bg {
+  background: rgba(96, 165, 250, 0.25);
+  box-shadow: 0 0 0 1px rgba(96, 165, 250, 0.5), 0 8px 24px rgba(96, 165, 250, 0.3);
+}
+
+/* Window animations */
+.window-enter {
+  animation: scale-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.no-drag { -webkit-app-region: no-drag; }
+
+/* Wallpaper gradient backgrounds */
+.wallpaper-default {
+  background: 
+    radial-gradient(ellipse at 20% 20%, rgba(99, 102, 241, 0.4), transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(168, 85, 247, 0.4), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.3), transparent 60%),
+    linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+}
+
+.wallpaper-aurora {
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(34, 211, 238, 0.5), transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(232, 121, 249, 0.5), transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(251, 146, 60, 0.4), transparent 50%),
+    linear-gradient(180deg, #020617 0%, #0c0a1e 100%);
+}
+
+.wallpaper-flow {
+  background:
+    radial-gradient(ellipse at 80% 20%, rgba(16, 185, 129, 0.45), transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(59, 130, 246, 0.5), transparent 50%),
+    linear-gradient(135deg, #064e3b 0%, #0c1d3d 100%);
+}
+
+.wallpaper-sunset {
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(251, 113, 133, 0.55), transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(245, 158, 11, 0.5), transparent 50%),
+    radial-gradient(ellipse at 20% 80%, rgba(168, 85, 247, 0.4), transparent 50%),
+    linear-gradient(180deg, #1e1b4b 0%, #4c1d95 50%, #831843 100%);
+}
+
+.dot-pattern {
+  background-image: radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Search input focus */
+.search-input:focus { outline: none; }
+
+/* Copilot typing dots */
+@keyframes typing-bounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-6px); opacity: 1; }
+}
+.typing-dot { animation: typing-bounce 1.4s ease-in-out infinite; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+/* Hide scrollbar in specific areas */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { scrollbar-width: none; }
