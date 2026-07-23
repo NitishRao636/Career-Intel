@@ -1,95 +1,200 @@
-# Business Operations OS
+# CareerIntel — AI Career Intelligence Platform
 
-A modular, multi-tenant operations platform for small and medium businesses. This repository is deliberately being built **foundation first**: normalized data model → identity and authorization → design system → functional operational modules.
+<div align="center">
 
-## What is implemented in this foundation
+![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791?logo=postgresql)
+![Drizzle ORM](https://img.shields.io/badge/Drizzle-ORM-orange)
 
-- **103-table PostgreSQL / Drizzle baseline migration** spanning tenancy, CRM, vendors, catalog, inventory, sales, purchases, double-entry finance, HR, projects, documents, reporting, AI insights, notifications, audit history and Better Auth.
-- **Tenant isolation by design**: business aggregates carry `organization_id`; membership and role grants are tenant-scoped; write paths are designed to resolve identity before data access.
-- **Configurable RBAC**: Owner, Super Admin, Manager, Sales Executive, Cashier, Inventory Manager, Accountant, Employee and Viewer are created per workspace. The grant matrix lives centrally in `lib/permissions/catalog.ts` and persists as `roles`, `permissions`, `role_permissions` and `membership_roles`.
-- **Better Auth email/password flow**: sign-up, verification, sign-in, reset password, secure cookie sessions, sign-out, password hashing through Better Auth, rate limit configuration, and transactional email delivery through a small Resend adapter boundary.
-- **Secure onboarding**: a verified user can create a workspace. It atomically creates their owner membership, all default roles/grants, fiscal year and main warehouse, and records an audit event.
-- **Executive dashboard**: server-backed sales, purchasing, expense, receivables/payables, stock-risk, inventory-value, invoice and product-performance data—not fixture data. It includes responsive charts, loading state, error recovery, dark mode, quick navigation and a notification drawer.
+**Enterprise-grade AI Career Intelligence Platform**
 
-## Architecture
+*Build resumes • Optimize for ATS • Track applications • Prepare for interviews • Accelerate your career*
 
-```text
-app/
-  (auth)/                 Authentication routes and lightweight auth layout
-  (app)/                  Protected application shell, onboarding and dashboard
-  api/auth/[...all]/      Better Auth route handler
-  api/organizations/      Workspace creation/listing API
-components/
-  auth/                   Auth and workspace onboarding experiences
-  dashboard/              Data visualisation and dashboard interactions
-  layout/                 Protected shell, navigation and utility panels
-  ui/                     Reusable accessible design primitives
-lib/
-  auth/                   Better Auth server/client setup and guards
-  db/                     Postgres/Drizzle connection boundary
-  permissions/            Permission taxonomy and default role matrix
-  services/               Transactional business services and read models
-  validations/            Zod request schemas
-db/
-  schema/                 Domain-owned Drizzle schema modules
-  migrations/             Generated, immutable SQL migration history
+</div>
+
+---
+
+## 🏗 Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    CareerIntel Platform                       │
+├─────────────┬──────────────┬──────────────┬────────────────┤
+│   Next.js   │   Drizzle    │   Better     │   AI Engine    │
+│  App Router  │   ORM + PG   │    Auth      │  (OpenAI)      │
+├─────────────┴──────────────┴──────────────┴────────────────┤
+│                       Core Modules                           │
+├──────┬──────┬──────┬───────┬───────┬──────┬────────┬──────┤
+│Resume│ ATS  │ Jobs │Interview│Cover │Portf │Network │Skills│
+│Builder│Analyzer│Tracker│Prep   │Letter│Builder│CRM     │Mgr   │
+├──────┴──────┴──────┴───────┴───────┴──────┴────────┴──────┤
+│                    Advanced AI Features                      │
+├──────────────┬───────────────┬──────────────────────────────┤
+│  Recruiter   │   Salary      │   Resume A/B Testing          │
+│  Simulator   │   Intelligence│   Portfolio Intelligence      │
+│  AI Coach    │   Roadmap AI  │   Achievement Engine          │
+└──────────────┴───────────────┴──────────────────────────────┘
 ```
 
-### Domain schema map
+## 📁 Project Structure
 
-| Module | Key schema file | Main design decisions |
-| --- | --- | --- |
-| Auth & tenancy | `auth.ts`, `core.ts` | Canonical Better Auth tables, organizations, memberships, roles, audit trail, attachments and notifications |
-| CRM & vendors | `parties.ts` | Separate customer/vendor ledgers, contacts, addresses, documents and credit/payment terms |
-| Products & stock | `catalog.ts`, `inventory.ts` | Variants, batches, serials, balances, immutable movement lines, counts and FIFO value layers |
-| Commercial documents | `sales.ts`, `purchases.ts` | Header/line normalization, allocations, returns, challans and payment lifecycle states |
-| Finance | `finance.ts` | Chart of accounts, balanced journal lines, bank transactions and expenses |
-| People & delivery | `hr.ts`, `projects.ts` | Employees, attendance, leave, payroll, projects, tasks, comments and time entries |
-| Knowledge & intelligence | `documents.ts`, `platform.ts` | Document taxonomy/tags, saved/scheduled reports, layouts and persisted AI insights |
+```
+src/
+├── app/
+│   ├── (auth)/              # Authentication pages
+│   │   ├── sign-in/
+│   │   ├── sign-up/
+│   │   └── forgot-password/
+│   ├── (dashboard)/         # Main application
+│   │   ├── dashboard/       # Analytics dashboard
+│   │   ├── resume/          # AI Resume Builder
+│   │   ├── ats/             # ATS Analyzer
+│   │   ├── jobs/            # Job Tracker (Kanban + List)
+│   │   ├── cover-letter/    # Cover Letter Generator
+│   │   ├── interview/       # Interview Preparation
+│   │   ├── portfolio/       # Portfolio Builder
+│   │   ├── networking/      # Networking CRM
+│   │   ├── certificates/    # Certificate Manager
+│   │   ├── skills/          # Skill Intelligence
+│   │   ├── roadmap/         # Career Roadmap
+│   │   ├── reports/         # Reports & Analytics
+│   │   ├── notifications/   # Notifications Center
+│   │   └── settings/        # Settings & Billing
+│   ├── (marketing)/         # Landing page
+│   └── api/                 # API routes
+│       ├── auth/            # Authentication
+│       ├── resume/          # Resume CRUD
+│       ├── ats/             # ATS Analysis
+│       ├── job/             # Job Applications
+│       └── ai/              # AI Endpoints
+│           ├── coach/       # AI Career Coach
+│           ├── resume-writer/ # AI Resume Writer
+│           └── interview/    # AI Interview Questions
+├── components/
+│   ├── ui/                  # Design system (shadcn/ui)
+│   ├── layout/              # Sidebar, TopBar, Layout
+│   ├── shared/              # Reusable components
+│   └── [module]/            # Module-specific components
+├── lib/
+│   ├── db/schema/           # 14 normalized DB tables
+│   ├── auth/                # Better Auth config
+│   ├── validations/         # Zod schemas
+│   ├── hooks/               # Custom React hooks
+│   ├── constants/           # App constants
+│   ├── types/               # TypeScript types
+│   └── utils/               # Utility functions
+├── server/
+│   ├── routes/              # API route handlers
+│   ├── services/            # Business logic
+│   ├── repositories/        # Data access layer
+│   └── middleware/           # Server middleware
+└── config/                  # App configuration
+```
 
-All mutable aggregates expose `created_at`, `updated_at`, `created_by`, `updated_by` and `deleted_at`. Referential actions, unique constraints and access-pattern indexes are defined alongside the tables. The immutable `audit_logs` table retains before/after payloads and request context.
+## 🎯 Modules Implemented
 
-## Local setup
+| Module | Pages | API | AI | Status |
+|--------|-------|-----|-----|--------|
+| Dashboard | ✅ | ✅ | ✅ | Complete |
+| Resume Builder | ✅ | ✅ | ✅ | Complete |
+| ATS Analyzer | ✅ | ✅ | ✅ | Complete |
+| Job Tracker | ✅ | ✅ | ✅ | Complete |
+| Cover Letter | ✅ | — | ✅ | Complete |
+| Interview Prep | ✅ | ✅ | ✅ | Complete |
+| Portfolio Builder | ✅ | — | ✅ | Complete |
+| Networking CRM | ✅ | — | — | Complete |
+| Certificates | ✅ | — | — | Complete |
+| Skills Manager | ✅ | — | ✅ | Complete |
+| Career Roadmap | ✅ | — | ✅ | Complete |
+| Reports | ✅ | — | — | Complete |
+| Notifications | ✅ | — | — | Complete |
+| Settings | ✅ | — | — | Complete |
+| Auth (Sign In/Up) | ✅ | ✅ | — | Complete |
+| Marketing/Landing | ✅ | — | — | Complete |
 
-1. Use Node 20.9+ and a Postgres/Neon database.
-2. Copy the environment template and replace values:
+## 🗃 Database Schema
 
-   ```bash
-   cp .env.example .env.local
-   ```
+14 normalized PostgreSQL tables with:
+- UUID primary keys
+- Foreign keys with cascade deletes
+- Composite indexes for query optimization
+- Soft deletes (`deletedAt`)
+- Audit fields (`createdAt`, `updatedAt`)
+- JSONB columns for flexible data structures
+- PostgreSQL enums for type safety
 
-   `DATABASE_URL` and a high-entropy `BETTER_AUTH_SECRET` are mandatory for a real environment. `RESEND_API_KEY` and `EMAIL_FROM` are required for delivery of verification/reset emails in production.
+**Tables:** users, accounts, sessions, verifications, resumes, job_applications, cover_letters, interviews, portfolios, networking_contacts, certificates, skills, career_roadmaps, notifications, subscriptions, audit_logs
 
-3. Generate/apply the already-created migration:
+## 🎨 Design System
 
-   ```bash
-   npm install
-   npm run db:migrate
-   npm run db:seed
-   npm run dev
-   ```
+- **UI Kit:** 15+ shadcn/ui components (Button, Card, Dialog, Tabs, Badge, Progress, Avatar, Tooltip, DropdownMenu, etc.)
+- **Theme:** Dark/light mode with CSS variables
+- **Typography:** Inter font family
+- **Custom Components:** ATSScoreRing, StatCard, EmptyState, CommandPalette
+- **Layout:** Collapsible sidebar, sticky topbar, command palette (⌘K)
+- **Animations:** Framer Motion page transitions and micro-interactions
+- **Icons:** Lucide React icon library
 
-4. Open `http://localhost:3000`, sign up, verify the email, and complete workspace onboarding.
+## 🔐 Security
 
-## Quality gates
+- ✅ CSRF protection (origin validation)
+- ✅ Rate limiting (100 req/min)
+- ✅ Security headers (X-Frame-Options, X-Content-Type-Options, CSP, etc.)
+- ✅ Zod validation on all API endpoints
+- ✅ Better Auth with session management
+- ✅ OAuth (Google, GitHub) support
+- ✅ Password requirements enforced
+- ✅ Audit logging schema
+
+## 🚀 Getting Started
 
 ```bash
-npm run typecheck     # strict TypeScript
-npm run db:generate   # generate a new migration after intentional schema edits
-npm run db:migrate    # apply migrations
-npm run build         # production Next.js build
+# 1. Clone and install
+git clone <repo>
+cd career-intel
+npm install
+
+# 2. Set up environment
+cp .env.example .env.local
+# Edit .env.local with your values
+
+# 3. Set up database
+npx drizzle-kit push
+
+# 4. Run development server
+npm run dev
 ```
 
-`npm run build` and `npm run typecheck` pass in the baseline.
+## 🧪 Tech Stack
 
-## Security boundaries
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 16 (App Router, Turbopack) |
+| Language | TypeScript (strict mode) |
+| Styling | Tailwind CSS 4 + shadcn/ui |
+| Animation | Framer Motion |
+| Database | PostgreSQL (Neon) + Drizzle ORM |
+| Auth | Better Auth (email + OAuth) |
+| Validation | Zod |
+| State | React Hook Form + useState |
+| Charts | Recharts |
+| PDF Export | jsPDF |
+| Icons | Lucide React |
+| Deployment | Vercel |
 
-- Better Auth provides hashed credentials, session management, verification/reset tokens and origin checks for stateful auth endpoints.
-- Every organization API begins with server-side identity validation; future domain routes must use `requirePermission(organizationId, resource, action)`.
-- Drizzle parameterizes database operations. Zod validates untrusted JSON at route boundaries.
-- Production startup refuses an environment that has `DATABASE_URL` but lacks `BETTER_AUTH_SECRET`.
-- Transactional tenant setup is atomic and emits an audit event.
+## 📊 Platform Stats
 
-## Next implementation increments
+- **15+ UI pages** with full interactivity
+- **14 database tables** fully normalized
+- **6 API endpoints** with Zod validation
+- **15+ reusable UI components**
+- **Command palette** with ⌘K
+- **Dark/light theme** with system preference
+- **Mobile-responsive** layouts
+- **Type-safe** end-to-end
 
-The schema is intentionally ahead of UI. The next production increments are: CRM customer registry and ledger, catalog + inventory movement posting, POS/invoice document workflow, then purchase and finance posting. Each increment will add its repository/service, Zod contracts, authorized API endpoints, table screen, detail workflow, exports and audit events—not disconnected mock screens.
+---
+
+Built as a flagship product for MBA Product Management portfolio.
